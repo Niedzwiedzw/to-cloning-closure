@@ -7,3 +7,6 @@ edition = "2021"
 
 [build-dependencies]
 thiserror = "1.0.47"
+itertools = "0.11.0"
+
+[dependencies]
