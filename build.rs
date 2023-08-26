@@ -51,7 +51,7 @@ impl Display for Trait {
     pub trait {trait_name}: Sized {{
         fn {method_name}<R, B, {parameters}>(&self, builder: B) -> Box<dyn (Fn({parameters}) -> R)>
         where
-            B: (Fn(&Self, {parameters}) -> R) + Copy + 'static;
+            B: (Fn(Self, {parameters}) -> R) + Copy + 'static;
     }}
 "#
         )
@@ -109,12 +109,13 @@ impl Trait {
     {{
         fn {method_name}<R, B, {closure_generic_parameters}>(&self, builder: B) -> Box<dyn (Fn({closure_generic_parameters}) -> R)>
         where
-            B: (Fn(&Self, {closure_generic_parameters}) -> R) + Copy + 'static,
+            B: (Fn(Self, {closure_generic_parameters}) -> R) + Copy + 'static,
         {{
             let ({tuple_generic_parameters},) = self;
-            let tuple = ({cloned_tuple_generic_parameters},);
+            let ({tuple_generic_parameters}, )= ({cloned_tuple_generic_parameters},);
             Box::new(move |{closure_generic_parameters}| {{
-                builder(&tuple, {closure_generic_parameters})
+                let tuple = ({cloned_tuple_generic_parameters},);
+                builder(tuple, {closure_generic_parameters})
             }})
         }}
     }}
